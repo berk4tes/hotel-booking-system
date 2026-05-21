@@ -188,17 +188,23 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Docker images were not built or pushed, per assignment note
 
+\- \*\*GitHub Actions scheduler\*\* - added:
+
+&#x20; - `.github/workflows/cron.yml` triggers notification cron endpoints daily at 02:00 UTC
+
+&#x20; - Manual `workflow_dispatch` trigger included for demos
+
+&#x20; - Requires GitHub secret `NOTIFICATION_URL` after Notification Service is deployed
+
 
 
 \### Remaining (in priority order)
 
 1\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-2\. \*\*GitHub Actions cron\*\* for scheduled tasks
+2\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-3\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-4\. \*\*Demo video\*\* (max 5 min)
+3\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -276,7 +282,7 @@ hotel-booking-system/
 
 ├── docs/               TODO (ER diagram, architecture diagram)
 
-└── .github/workflows/  TODO (cron.yml)
+└── .github/workflows/  DONE (cron.yml)
 
 
 
@@ -766,7 +772,7 @@ jobs:
 
 \- \[x] Cloud queue (CloudAMQP)
 
-\- \[ ] Cloud scheduler (GitHub Actions)
+\- \[x] Cloud scheduler workflow (GitHub Actions; `NOTIFICATION_URL` secret needed after deploy)
 
 \- \[x] Search returns only vacant rooms
 
