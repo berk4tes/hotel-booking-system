@@ -1,9 +1,17 @@
 ﻿node_modules/
 .env
 .env.local
+.env.*
 *.log
 dist/
 build/
 .DS_Store
 .vscode/
 .idea/
+
+# secrets / notes
+notes.txt
+secrets.txt
+*-secrets.txt
+test-mongo.js
+seed-*.js
