@@ -132,7 +132,7 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Notification service uses `.env` keys: `PORT`, `DATABASE_URL`, `AMQP_URL`
 
-\- \*\*AI Agent Service\*\* (port 3006) - implemented:
+\- \*\*AI Agent Service\*\* (port 3006) - functional:
 
 &#x20; - `GET /health`
 
@@ -142,27 +142,39 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Tools route through `GATEWAY_URL`; booking tool requires and forwards `Authorization`
 
-&#x20; - Verified OpenAI API key and non-tool chat smoke test; tool e2e smoke test pending until Gateway Service is implemented
+&#x20; - Verified OpenAI API key, non-tool chat smoke test, and gateway-routed `search_hotels` tool e2e smoke test
 
 &#x20; - AI Agent service uses `.env` keys: `PORT`, `GATEWAY_URL`, `OPENAI_API_KEY`
+
+\- \*\*API Gateway\*\* (port 3000) - functional:
+
+&#x20; - `GET /health`
+
+&#x20; - CORS open for frontend
+
+&#x20; - Routes via `http-proxy-middleware`: `/api/v1/admin`, `/api/v1/search`, `/api/v1/bookings`, `/api/v1/comments`, `/api/v1/ai`
+
+&#x20; - Forwards `Authorization` header to downstream services
+
+&#x20; - Verified gateway smoke test for Search, Comments, Booking auth, AI chat, and AI tool routing
+
+&#x20; - Gateway service uses `.env` keys: `PORT`, `ADMIN_SERVICE_URL`, `SEARCH_SERVICE_URL`, `BOOKING_SERVICE_URL`, `COMMENTS_SERVICE_URL`, `AI_AGENT_SERVICE_URL`
 
 
 
 \### Remaining (in priority order)
 
-1\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+1\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-2\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+2\. \*\*Dockerfiles\*\* for each service + frontend
 
-3\. \*\*Dockerfiles\*\* for each service + frontend
+3\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-4\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+4\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-5\. \*\*GitHub Actions cron\*\* for scheduled tasks
+5\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-6\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-7\. \*\*Demo video\*\* (max 5 min)
+6\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -234,7 +246,7 @@ hotel-booking-system/
 
 │   ├── ai-agent/       DONE  port 3006
 
-│   └── gateway/        TODO  port 3000
+│   └── gateway/        DONE  port 3000
 
 ├── frontend/           TODO
 
@@ -564,7 +576,7 @@ Public read, auth for write.
 
 
 
-\### ai-agent (DONE, port 3006; tool e2e pending Gateway)
+\### ai-agent (DONE, port 3006)
 
 Auth optional (required for booking action).
 
@@ -578,7 +590,7 @@ Auth optional (required for booking action).
 
 
 
-\### gateway (TODO, port 3000)
+\### gateway (DONE, port 3000)
 
 No auth at gateway — downstream services validate their own tokens. CORS open for frontend.
 
@@ -708,7 +720,7 @@ jobs:
 
 \- \[x] Pagination on list endpoints
 
-\- \[ ] API gateway as single entry point
+\- \[x] API gateway as single entry point
 
 \- \[x] IAM (Supabase, no local auth)
 
@@ -944,5 +956,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Build the \*\*API Gateway\*\* (port 3000) next, then run AI Agent tool e2e smoke tests through the gateway.
+Build the \*\*Frontend\*\* next: React 18 + Vite + Tailwind + Supabase JS client + react-leaflet, using the Gateway as the single API entry point.
 
