@@ -191,6 +191,8 @@ Completed smoke tests:
 
 ## Deployment Notes
 
+See [docs/deployment.md](docs/deployment.md) for the service-by-service deployment runbook.
+
 Backend target: Azure App Service, Linux, Node 20.
 
 Frontend target: Vercel, root directory `frontend/`.

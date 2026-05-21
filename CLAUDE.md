@@ -202,6 +202,8 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - `docs/architecture.md` and `docs/er-diagram.md` added with Mermaid diagrams
 
+&#x20; - `docs/deployment.md` added with Azure/Vercel/GitHub Actions deployment runbook
+
 &#x20; - Deployed URLs and demo video link still TBD until deployment/demo recording
 
 
