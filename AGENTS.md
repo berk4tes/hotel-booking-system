@@ -62,39 +62,53 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Availability: `PUT /api/v1/rooms/:id/availability`
 
+\- \*\*Search Service\*\* (port 3002) - functional:
+
+&#x20; - `GET /health`
+
+&#x20; - `GET /api/v1/hotels/search?city=&start_date=&end_date=&guests=&page=&limit=`
+
+&#x20; - Search filters by city/date/guest availability and returns map fields (`lat`, `lng`)
+
+&#x20; - Optional Bearer token enables 15% discounted prices in response
+
+&#x20; - `GET /api/v1/hotels/:id` returns hotel + rooms using Upstash Redis REST cache-aside
+
+&#x20; - Verified public search with Neon and Redis cache miss/hit (`hotel:6` miss then hit)
+
+&#x20; - Verified authenticated Supabase user token smoke test; response includes `discounted_price` and `discounted_min_price`
+
+&#x20; - Search service uses `.env` keys: `PORT`, `DATABASE_URL`, `SUPABASE_URL`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
+
 
 
 \### Remaining (in priority order)
 
 1\. Test Admin Service end-to-end with real Supabase token
 
-2\. \*\*Search Service\*\* (port 3002) - search with discount logic, map data, hotel detail with Redis cache
+2\. \*\*Comments Service\*\* (port 3004) - read comments + aggregation summary
 
-3\. \*\*Comments Service\*\* (port 3004) - read comments + aggregation summary
+3\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier) before Booking Service
 
 4\. \*\*Booking Service\*\* (port 3003) - create booking + decrement capacity + publish to RabbitMQ
 
-5\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier)
+5\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
 
-6\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
+6\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
 
-7\. \*\*Redis Cache\*\* (Upstash) integration for Search Service hotel detail
+7\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
 
-8\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
+8\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-9\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+9\. \*\*Dockerfiles\*\* for each service + frontend
 
-10\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+10\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-11\. \*\*Dockerfiles\*\* for each service + frontend
+11\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-12\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+12\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-13\. \*\*GitHub Actions cron\*\* for scheduled tasks
-
-14\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-15\. \*\*Demo video\*\* (max 5 min)
+13\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -156,7 +170,7 @@ hotel-booking-system/
 
 │   ├── admin/          DONE  port 3001
 
-│   ├── search/         TODO  port 3002
+│   ├── search/         DONE  port 3002
 
 │   ├── booking/        TODO  port 3003
 
@@ -644,7 +658,7 @@ jobs:
 
 \- \[x] IAM (Supabase, no local auth)
 
-\- \[ ] Distributed cache for hotel details (Redis)
+\- \[x] Distributed cache for hotel details (Redis via Upstash REST)
 
 \- \[ ] Queue (RabbitMQ for reservations)
 
@@ -664,11 +678,11 @@ jobs:
 
 \- \[ ] Cloud scheduler (GitHub Actions)
 
-\- \[ ] Search returns only vacant rooms
+\- \[x] Search returns only vacant rooms
 
-\- \[ ] Search applies 15% discount when logged in
+\- \[x] Search applies 15% discount when logged in (verified with real Supabase token)
 
-\- \[ ] Search has map view ("Haritada göster")
+\- \[x] Search has map view ("Haritada göster") data (`lat`, `lng`)
 
 \- \[ ] Booking decreases capacity
 
@@ -876,5 +890,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Test admin service end-to-end with a real Supabase token, then build the \*\*Search Service\*\* (port 3002). Search is central — it powers user search results, hotel detail page (with Redis caching), and is consumed by Booking + AI Agent. Reuse `db.js` and `auth.js` patterns from admin service.
+Commit and push the completed \*\*Search Service\*\*, then test Admin Service end-to-end with a real Supabase token. After that, build the \*\*Comments Service\*\* (port 3004) because MongoDB Atlas is already ready and no new cloud setup is needed before it.
 
