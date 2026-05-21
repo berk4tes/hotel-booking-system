@@ -132,25 +132,37 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Notification service uses `.env` keys: `PORT`, `DATABASE_URL`, `AMQP_URL`
 
+\- \*\*AI Agent Service\*\* (port 3006) - implemented:
+
+&#x20; - `GET /health`
+
+&#x20; - `POST /api/v1/ai/chat` calls OpenAI `gpt-4o-mini`
+
+&#x20; - Tool definitions implemented: `search_hotels`, `get_hotel_details`, `get_comments_summary`, `book_hotel`
+
+&#x20; - Tools route through `GATEWAY_URL`; booking tool requires and forwards `Authorization`
+
+&#x20; - Verified OpenAI API key and non-tool chat smoke test; tool e2e smoke test pending until Gateway Service is implemented
+
+&#x20; - AI Agent service uses `.env` keys: `PORT`, `GATEWAY_URL`, `OPENAI_API_KEY`
+
 
 
 \### Remaining (in priority order)
 
-1\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
+1\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
 
-2\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+2\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-3\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+3\. \*\*Dockerfiles\*\* for each service + frontend
 
-4\. \*\*Dockerfiles\*\* for each service + frontend
+4\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-5\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+5\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-6\. \*\*GitHub Actions cron\*\* for scheduled tasks
+6\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-7\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-8\. \*\*Demo video\*\* (max 5 min)
+7\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -220,7 +232,7 @@ hotel-booking-system/
 
 │   ├── notification/   DONE  port 3005
 
-│   ├── ai-agent/       TODO  port 3006
+│   ├── ai-agent/       DONE  port 3006
 
 │   └── gateway/        TODO  port 3000
 
@@ -552,7 +564,7 @@ Public read, auth for write.
 
 
 
-\### ai-agent (TODO, port 3006)
+\### ai-agent (DONE, port 3006; tool e2e pending Gateway)
 
 Auth optional (required for booking action).
 
@@ -708,7 +720,7 @@ jobs:
 
 \- \[x] Nightly scheduled task endpoints
 
-\- \[ ] AI Agent with chat UI
+\- \[x] AI Agent service with tool calling
 
 \- \[ ] Dockerfile per service (NOT docker image)
 
@@ -932,5 +944,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Build the \*\*AI Agent Service\*\* (port 3006) next. It should use OpenAI GPT-4o-mini with tool calling and route tools through the Gateway URL once the gateway is available.
+Build the \*\*API Gateway\*\* (port 3000) next, then run AI Agent tool e2e smoke tests through the gateway.
 
