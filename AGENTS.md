@@ -196,13 +196,21 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Requires GitHub secret `NOTIFICATION_URL` after Notification Service is deployed
 
+\- \*\*Docs/README\*\* - drafted:
+
+&#x20; - `README.md` includes architecture, ER diagram, service table, local setup, verification notes, assumptions, and deployment placeholders
+
+&#x20; - `docs/architecture.md` and `docs/er-diagram.md` added with Mermaid diagrams
+
+&#x20; - Deployed URLs and demo video link still TBD until deployment/demo recording
+
 
 
 \### Remaining (in priority order)
 
 1\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-2\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
+2\. Fill final \*\*README\*\* deployed URLs and demo video link after deployment
 
 3\. \*\*Demo video\*\* (max 5 min)
 
@@ -280,7 +288,7 @@ hotel-booking-system/
 
 ├── frontend/           DONE
 
-├── docs/               TODO (ER diagram, architecture diagram)
+├── docs/               DONE (ER diagram, architecture diagram)
 
 └── .github/workflows/  DONE (cron.yml)
 
