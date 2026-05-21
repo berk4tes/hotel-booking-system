@@ -180,19 +180,25 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Frontend `.env` keys: `VITE_API_GATEWAY_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
 
+\- \*\*Dockerfiles\*\* - added:
+
+&#x20; - Dockerfile exists for all 7 backend services
+
+&#x20; - Frontend Dockerfile uses Vite build stage and nginx static serving stage
+
+&#x20; - Docker images were not built or pushed, per assignment note
+
 
 
 \### Remaining (in priority order)
 
-1\. \*\*Dockerfiles\*\* for each service + frontend
+1\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-2\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+2\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-3\. \*\*GitHub Actions cron\*\* for scheduled tasks
+3\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-4\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-5\. \*\*Demo video\*\* (max 5 min)
+4\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -752,7 +758,7 @@ jobs:
 
 \- \[x] AI Agent service with tool calling
 
-\- \[ ] Dockerfile per service (NOT docker image)
+\- \[x] Dockerfile per service (NOT docker image)
 
 \- \[x] Cloud DB (Neon + Mongo, no SQLite)
 
@@ -974,5 +980,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Add \*\*Dockerfiles\*\* for each backend service and the frontend next. Do not build/push Docker images; the assignment only requires Dockerfiles.
+Prepare \*\*cloud deployment\*\* next: Azure App Service environment variables for each backend, Vercel frontend env vars, and GitHub Actions cron secrets.
 
