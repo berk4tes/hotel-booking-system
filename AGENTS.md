@@ -82,33 +82,45 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Search service uses `.env` keys: `PORT`, `DATABASE_URL`, `SUPABASE_URL`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
 
+\- \*\*Comments Service\*\* (port 3004) - functional:
+
+&#x20; - `GET /health`
+
+&#x20; - `GET /api/v1/hotels/:id/comments?page=&limit=` returns paginated MongoDB comments
+
+&#x20; - `GET /api/v1/hotels/:id/comments/summary` returns MongoDB aggregation with total, `average_overall`, and category averages
+
+&#x20; - `POST /api/v1/hotels/:id/comments` requires Bearer token and writes verified user comments
+
+&#x20; - Verified public list/summary and authenticated write smoke test; temporary test comment was cleaned up
+
+&#x20; - Comments service uses `.env` keys: `PORT`, `MONGODB_URI`, `SUPABASE_URL`
+
 
 
 \### Remaining (in priority order)
 
-1\. \*\*Comments Service\*\* (port 3004) - read comments + aggregation summary
+1\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier) before Booking Service
 
-2\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier) before Booking Service
+2\. \*\*Booking Service\*\* (port 3003) - create booking + decrement capacity + publish to RabbitMQ
 
-3\. \*\*Booking Service\*\* (port 3003) - create booking + decrement capacity + publish to RabbitMQ
+3\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
 
-4\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
+4\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
 
-5\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
+5\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
 
-6\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+6\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-7\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+7\. \*\*Dockerfiles\*\* for each service + frontend
 
-8\. \*\*Dockerfiles\*\* for each service + frontend
+8\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-9\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+9\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-10\. \*\*GitHub Actions cron\*\* for scheduled tasks
+10\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-11\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-12\. \*\*Demo video\*\* (max 5 min)
+11\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -174,7 +186,7 @@ hotel-booking-system/
 
 │   ├── booking/        TODO  port 3003
 
-│   ├── comments/       TODO  port 3004
+│   ├── comments/       DONE  port 3004
 
 │   ├── notification/   TODO  port 3005
 
@@ -686,7 +698,7 @@ jobs:
 
 \- \[ ] Booking decreases capacity
 
-\- \[ ] Comments have distribution graph per rating category
+\- \[x] Comments have distribution graph per rating category data
 
 \- \[ ] Notification: capacity alert + reservation queue consumer
 
@@ -890,5 +902,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Build the \*\*Comments Service\*\* (port 3004) next. MongoDB Atlas is already ready, so no new cloud setup is needed before this service.
+Set up \*\*RabbitMQ\*\* with CloudAMQP before Booking Service, then build the \*\*Booking Service\*\* (port 3003). Booking needs the queue to publish reservation confirmation messages for Notification Service.
 
