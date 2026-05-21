@@ -96,31 +96,51 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Comments service uses `.env` keys: `PORT`, `MONGODB_URI`, `SUPABASE_URL`
 
+\- \*\*CloudAMQP RabbitMQ\*\* - configured:
+
+&#x20; - Free `Loyal Lemming` LavinMQ instance in AWS Stockholm (`EU-North-1`)
+
+&#x20; - `reservations` durable queue verified with `amqplib`
+
+\- \*\*Booking Service\*\* (port 3003) - functional:
+
+&#x20; - `GET /health`
+
+&#x20; - All `/api/v1/*` require Bearer token (JWKS verification via `jose`)
+
+&#x20; - `POST /api/v1/bookings` validates room capacity and date availability in a PostgreSQL transaction
+
+&#x20; - Booking creation decrements `room_availability.available_count` and inserts into `bookings`
+
+&#x20; - Publishes reservation confirmation payload to RabbitMQ `reservations` queue
+
+&#x20; - `GET /api/v1/bookings/me?page=&limit=` returns paginated user bookings
+
+&#x20; - Verified end-to-end with real Supabase user token, Neon transaction, and CloudAMQP publish; test booking and availability were cleaned up
+
+&#x20; - Booking service uses `.env` keys: `PORT`, `DATABASE_URL`, `SUPABASE_URL`, `AMQP_URL`
+
 
 
 \### Remaining (in priority order)
 
-1\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier) before Booking Service
+1\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
 
-2\. \*\*Booking Service\*\* (port 3003) - create booking + decrement capacity + publish to RabbitMQ
+2\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
 
-3\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
+3\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
 
-4\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
+4\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-5\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+5\. \*\*Dockerfiles\*\* for each service + frontend
 
-6\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+6\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-7\. \*\*Dockerfiles\*\* for each service + frontend
+7\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-8\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+8\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-9\. \*\*GitHub Actions cron\*\* for scheduled tasks
-
-10\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-11\. \*\*Demo video\*\* (max 5 min)
+9\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -184,7 +204,7 @@ hotel-booking-system/
 
 │   ├── search/         DONE  port 3002
 
-│   ├── booking/        TODO  port 3003
+│   ├── booking/        DONE  port 3003
 
 │   ├── comments/       DONE  port 3004
 
@@ -672,7 +692,7 @@ jobs:
 
 \- \[x] Distributed cache for hotel details (Redis via Upstash REST)
 
-\- \[ ] Queue (RabbitMQ for reservations)
+\- \[x] Queue (RabbitMQ for reservations)
 
 \- \[x] Comments in NoSQL (MongoDB)
 
@@ -686,7 +706,7 @@ jobs:
 
 \- \[ ] Cloud API hosting (Azure)
 
-\- \[ ] Cloud queue (CloudAMQP)
+\- \[x] Cloud queue (CloudAMQP)
 
 \- \[ ] Cloud scheduler (GitHub Actions)
 
@@ -696,7 +716,7 @@ jobs:
 
 \- \[x] Search has map view ("Haritada göster") data (`lat`, `lng`)
 
-\- \[ ] Booking decreases capacity
+\- \[x] Booking decreases capacity
 
 \- \[x] Comments have distribution graph per rating category data
 
@@ -902,5 +922,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Set up \*\*RabbitMQ\*\* with CloudAMQP before Booking Service, then build the \*\*Booking Service\*\* (port 3003). Booking needs the queue to publish reservation confirmation messages for Notification Service.
+Build the \*\*Notification Service\*\* (port 3005) next. RabbitMQ is ready, so implement the low-capacity cron endpoint and the `reservations` queue consumer endpoint.
 
