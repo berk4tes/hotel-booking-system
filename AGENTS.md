@@ -120,27 +120,37 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Booking service uses `.env` keys: `PORT`, `DATABASE_URL`, `SUPABASE_URL`, `AMQP_URL`
 
+\- \*\*Notification Service\*\* (port 3005) - functional:
+
+&#x20; - `GET /health`
+
+&#x20; - `GET /cron/check-capacity` checks next 30 days of room availability and logs low-capacity admin alerts
+
+&#x20; - `GET /cron/process-reservations` consumes all messages from RabbitMQ `reservations` queue and logs reservation notifications
+
+&#x20; - Verified capacity smoke test over 10 rooms and RabbitMQ consumer smoke test with a temporary message
+
+&#x20; - Notification service uses `.env` keys: `PORT`, `DATABASE_URL`, `AMQP_URL`
+
 
 
 \### Remaining (in priority order)
 
-1\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
+1\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
 
-2\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
+2\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
 
-3\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+3\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-4\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+4\. \*\*Dockerfiles\*\* for each service + frontend
 
-5\. \*\*Dockerfiles\*\* for each service + frontend
+5\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-6\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+6\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-7\. \*\*GitHub Actions cron\*\* for scheduled tasks
+7\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-8\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-9\. \*\*Demo video\*\* (max 5 min)
+8\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -208,7 +218,7 @@ hotel-booking-system/
 
 │   ├── comments/       DONE  port 3004
 
-│   ├── notification/   TODO  port 3005
+│   ├── notification/   DONE  port 3005
 
 │   ├── ai-agent/       TODO  port 3006
 
@@ -696,7 +706,7 @@ jobs:
 
 \- \[x] Comments in NoSQL (MongoDB)
 
-\- \[ ] Nightly scheduled task
+\- \[x] Nightly scheduled task endpoints
 
 \- \[ ] AI Agent with chat UI
 
@@ -720,7 +730,7 @@ jobs:
 
 \- \[x] Comments have distribution graph per rating category data
 
-\- \[ ] Notification: capacity alert + reservation queue consumer
+\- \[x] Notification: capacity alert + reservation queue consumer
 
 \- \[ ] README with deployed URLs, ER diagram, assumptions, video link
 
@@ -922,5 +932,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Build the \*\*Notification Service\*\* (port 3005) next. RabbitMQ is ready, so implement the low-capacity cron endpoint and the `reservations` queue consumer endpoint.
+Build the \*\*AI Agent Service\*\* (port 3006) next. It should use OpenAI GPT-4o-mini with tool calling and route tools through the Gateway URL once the gateway is available.
 
