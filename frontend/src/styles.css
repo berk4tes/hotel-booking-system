@@ -1,0 +1,434 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Aptos", "Segoe UI", sans-serif;
+  color: #1c1917;
+  background: #f7f3eb;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg, rgba(17, 94, 89, 0.06) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(17, 94, 89, 0.05) 1px, transparent 1px),
+    #f7f3eb;
+  background-size: 44px 44px;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.font-serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 96px;
+}
+
+.search-band {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 28px;
+  align-items: end;
+  min-height: 420px;
+  padding: 34px 0;
+}
+
+.search-copy {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  background: linear-gradient(rgba(247, 243, 235, 0.38), rgba(247, 243, 235, 0.78)), url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  padding: 42px;
+}
+
+.search-panel, .auth-panel, .summary-panel, .admin-form, .ai-panel {
+  border: 1px solid #d7d0c3;
+  background: rgba(255, 253, 247, 0.94);
+  box-shadow: 0 18px 40px rgba(41, 37, 36, 0.08);
+}
+
+.search-panel {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  color: #57534e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input, select, textarea {
+  width: 100%;
+  border: 1px solid #d7d0c3;
+  background: #fffdf7;
+  color: #1c1917;
+  padding: 11px 12px;
+  outline: none;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.13);
+}
+
+.eyebrow {
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.primary-button, .command-button, .arrow-button, .nav-button, .icon-button, .link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #134e4a;
+  min-height: 42px;
+  padding: 0 15px;
+  font-weight: 800;
+}
+
+.primary-button {
+  background: #134e4a;
+  color: #fffdf7;
+}
+
+.primary-button.slim {
+  min-height: 36px;
+  padding-inline: 12px;
+}
+
+.command-button, .arrow-button, .nav-button, .icon-button, .link-button {
+  background: #fffdf7;
+  color: #134e4a;
+}
+
+.icon-button {
+  width: 42px;
+  padding: 0;
+}
+
+.nav-button {
+  border-color: transparent;
+  background: transparent;
+}
+
+.nav-button:hover, .command-button:hover, .arrow-button:hover {
+  border-color: #134e4a;
+  background: #e7eee9;
+}
+
+.content-strip {
+  padding: 28px 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.hotel-card, .comment-card, .room-row {
+  border: 1px solid #d7d0c3;
+  background: #fffdf7;
+}
+
+.hotel-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.hotel-card-body {
+  display: grid;
+  gap: 14px;
+  padding: 17px;
+}
+
+.rating, .tag, .member-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid #d7d0c3;
+  background: #f7f3eb;
+  padding: 5px 8px;
+  color: #57534e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.member-badge {
+  border-color: #0f766e;
+  color: #0f766e;
+}
+
+.price {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  font-weight: 700;
+  color: #134e4a;
+}
+
+.price.compact {
+  font-size: 20px;
+}
+
+.map-shell {
+  height: 570px;
+  overflow: hidden;
+  border: 1px solid #d7d0c3;
+  background: #fffdf7;
+}
+
+.detail-hero {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 30px;
+  align-items: center;
+}
+
+.detail-hero img {
+  width: 100%;
+  aspect-ratio: 1.25 / 1;
+  object-fit: cover;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.stack {
+  display: grid;
+  gap: 12px;
+}
+
+.room-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px;
+}
+
+.summary-panel {
+  padding: 20px;
+  align-self: start;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 38px;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.score-row div {
+  height: 8px;
+  background: #e7e0d4;
+}
+
+.score-row div span {
+  display: block;
+  height: 100%;
+  background: #0f766e;
+}
+
+.comment-grid, .admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.comment-card, .admin-form {
+  padding: 16px;
+}
+
+.comment-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.auth-shell {
+  min-height: calc(100vh - 68px);
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.auth-panel {
+  width: min(440px, 100%);
+  display: grid;
+  gap: 14px;
+  padding: 24px;
+}
+
+.admin-form {
+  display: grid;
+  gap: 10px;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+}
+
+.check-row input {
+  width: auto;
+}
+
+.notice, .empty-state {
+  border: 1px solid #d7d0c3;
+  background: #fffdf7;
+  padding: 14px 16px;
+  color: #134e4a;
+  margin: 14px 0;
+}
+
+.notice.error {
+  border-color: #b91c1c;
+  color: #b91c1c;
+}
+
+.ai-widget {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 50;
+}
+
+.ai-toggle {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #134e4a;
+  background: #134e4a;
+  color: #fffdf7;
+  box-shadow: 0 18px 30px rgba(19, 78, 74, 0.2);
+}
+
+.ai-panel {
+  width: min(360px, calc(100vw - 36px));
+  height: 470px;
+  margin-bottom: 12px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.ai-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px;
+  border-bottom: 1px solid #d7d0c3;
+  font-weight: 800;
+}
+
+.ai-messages {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  overflow: auto;
+  padding: 12px;
+}
+
+.bubble {
+  padding: 10px 12px;
+  max-width: 86%;
+  font-size: 14px;
+}
+
+.bubble.user {
+  justify-self: end;
+  background: #134e4a;
+  color: #fffdf7;
+}
+
+.bubble.assistant {
+  justify-self: start;
+  background: #eee7da;
+  color: #292524;
+}
+
+.ai-form {
+  display: grid;
+  grid-template-columns: 1fr 46px;
+  border-top: 1px solid #d7d0c3;
+}
+
+.ai-form input {
+  border: 0;
+}
+
+.ai-form button {
+  border: 0;
+  background: #134e4a;
+  color: #fffdf7;
+}
+
+@media (max-width: 900px) {
+  .search-band, .detail-hero, .split-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hotel-grid, .comment-grid, .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-copy {
+    min-height: 300px;
+    padding: 26px;
+  }
+
+  .section-head, .room-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .map-shell {
+    height: 430px;
+  }
+}

@@ -160,21 +160,39 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Gateway service uses `.env` keys: `PORT`, `ADMIN_SERVICE_URL`, `SEARCH_SERVICE_URL`, `BOOKING_SERVICE_URL`, `COMMENTS_SERVICE_URL`, `AI_AGENT_SERVICE_URL`
 
+\- \*\*Frontend\*\* - implemented:
+
+&#x20; - React + Vite + Tailwind CSS app in `frontend/`
+
+&#x20; - Uses Supabase JS client for login/register/session state
+
+&#x20; - All API calls go through `VITE_API_GATEWAY_URL`
+
+&#x20; - Pages implemented: search home, hotel detail, login, register, my bookings, admin dashboard
+
+&#x20; - Search results include member discount badge and Leaflet map toggle
+
+&#x20; - Hotel detail includes rooms, booking action, comments, and rating-category progress bars
+
+&#x20; - Sticky AI chat widget calls `/api/v1/ai/chat`
+
+&#x20; - Production build verified with `npm run build`; visual browser smoke test tool was unavailable in this session
+
+&#x20; - Frontend `.env` keys: `VITE_API_GATEWAY_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`
+
 
 
 \### Remaining (in priority order)
 
-1\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+1\. \*\*Dockerfiles\*\* for each service + frontend
 
-2\. \*\*Dockerfiles\*\* for each service + frontend
+2\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-3\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+3\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-4\. \*\*GitHub Actions cron\*\* for scheduled tasks
+4\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-5\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-6\. \*\*Demo video\*\* (max 5 min)
+5\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -248,7 +266,7 @@ hotel-booking-system/
 
 │   └── gateway/        DONE  port 3000
 
-├── frontend/           TODO
+├── frontend/           DONE
 
 ├── docs/               TODO (ER diagram, architecture diagram)
 
@@ -618,7 +636,7 @@ No auth at gateway — downstream services validate their own tokens. CORS open 
 
 
 
-\## Frontend (TODO)
+\## Frontend (DONE)
 
 
 
@@ -956,5 +974,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Build the \*\*Frontend\*\* next: React 18 + Vite + Tailwind + Supabase JS client + react-leaflet, using the Gateway as the single API entry point.
+Add \*\*Dockerfiles\*\* for each backend service and the frontend next. Do not build/push Docker images; the assignment only requires Dockerfiles.
 
