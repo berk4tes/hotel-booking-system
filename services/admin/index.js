@@ -12,6 +12,11 @@ app.get("/health", (req, res) => {
   res.json({ service: "admin", status: "ok" });
 });
 
+function sendServerError(res, error) {
+  console.error("Admin service error:", error.code || error.name || "Error");
+  res.status(500).json({ error: "Internal server error" });
+}
+
 app.use("/api/v1", verifyToken, requireAdmin);
 
 // HOTELS
@@ -24,7 +29,7 @@ app.get("/api/v1/hotels", async (req, res) => {
     const count = await pool.query("SELECT COUNT(*) FROM hotels");
     res.json({ data: result.rows, page, limit, total: parseInt(count.rows[0].count) });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 
@@ -37,7 +42,7 @@ app.post("/api/v1/hotels", async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 
@@ -52,7 +57,7 @@ app.put("/api/v1/hotels/:id", async (req, res) => {
     if (result.rows.length === 0) return res.status(404).json({ error: "Hotel not found" });
     res.json(result.rows[0]);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 
@@ -64,14 +69,20 @@ app.get("/api/v1/rooms", async (req, res) => {
   const hotelId = req.query.hotel_id;
   try {
     let query = "SELECT r.*, h.name as hotel_name FROM rooms r JOIN hotels h ON r.hotel_id=h.id";
+    let countQuery = "SELECT COUNT(*) FROM rooms r";
     let params = [];
-    if (hotelId) { query += " WHERE r.hotel_id=$1"; params.push(hotelId); }
-    query += " ORDER BY r.id LIMIT " + (params.length + 1) + " OFFSET " + (params.length + 2);
+    if (hotelId) {
+      query += " WHERE r.hotel_id=$1";
+      countQuery += " WHERE r.hotel_id=$1";
+      params.push(hotelId);
+    }
+    query += ` ORDER BY r.id LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
     const result = await pool.query(query, params);
-    res.json({ data: result.rows, page, limit });
+    const count = await pool.query(countQuery, hotelId ? [hotelId] : []);
+    res.json({ data: result.rows, page, limit, total: parseInt(count.rows[0].count) });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 
@@ -84,7 +95,7 @@ app.post("/api/v1/rooms", async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 
@@ -99,7 +110,7 @@ app.put("/api/v1/rooms/:id", async (req, res) => {
     if (result.rows.length === 0) return res.status(404).json({ error: "Room not found" });
     res.json(result.rows[0]);
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 
@@ -117,7 +128,7 @@ app.put("/api/v1/rooms/:id/availability", async (req, res) => {
     );
     res.json({ message: "Availability updated", room_id: id, start_date, end_date, is_available });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    sendServerError(res, e);
   }
 });
 

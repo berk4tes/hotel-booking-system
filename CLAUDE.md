@@ -62,6 +62,8 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Availability: `PUT /api/v1/rooms/:id/availability`
 
+&#x20; - Verified end-to-end with real Supabase admin token: health, missing-token 401, normal-user 403, hotels list, rooms list, and `hotel_id` room filter
+
 \- \*\*Search Service\*\* (port 3002) - functional:
 
 &#x20; - `GET /health`
@@ -84,31 +86,29 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 \### Remaining (in priority order)
 
-1\. Test Admin Service end-to-end with real Supabase token
+1\. \*\*Comments Service\*\* (port 3004) - read comments + aggregation summary
 
-2\. \*\*Comments Service\*\* (port 3004) - read comments + aggregation summary
+2\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier) before Booking Service
 
-3\. \*\*RabbitMQ setup\*\* (CloudAMQP free tier) before Booking Service
+3\. \*\*Booking Service\*\* (port 3003) - create booking + decrement capacity + publish to RabbitMQ
 
-4\. \*\*Booking Service\*\* (port 3003) - create booking + decrement capacity + publish to RabbitMQ
+4\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
 
-5\. \*\*Notification Service\*\* (port 3005) - cron endpoints + queue consumer
+5\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
 
-6\. \*\*AI Agent Service\*\* (port 3006) - OpenAI GPT-4o-mini with tool calling
+6\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
 
-7\. \*\*API Gateway\*\* (port 3000) - http-proxy-middleware routing
+7\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
 
-8\. \*\*Frontend\*\* (React + Vite + Tailwind + Leaflet)
+8\. \*\*Dockerfiles\*\* for each service + frontend
 
-9\. \*\*Dockerfiles\*\* for each service + frontend
+9\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
 
-10\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+10\. \*\*GitHub Actions cron\*\* for scheduled tasks
 
-11\. \*\*GitHub Actions cron\*\* for scheduled tasks
+11\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
 
-12\. \*\*README\*\* with deployed URLs, ER diagram, assumptions, video link
-
-13\. \*\*Demo video\*\* (max 5 min)
+12\. \*\*Demo video\*\* (max 5 min)
 
 
 
@@ -890,5 +890,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Commit and push the completed \*\*Search Service\*\*, then test Admin Service end-to-end with a real Supabase token. After that, build the \*\*Comments Service\*\* (port 3004) because MongoDB Atlas is already ready and no new cloud setup is needed before it.
+Build the \*\*Comments Service\*\* (port 3004) next. MongoDB Atlas is already ready, so no new cloud setup is needed before this service.
 

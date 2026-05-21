@@ -15,7 +15,7 @@ async function verifyToken(req, res, next) {
     req.user = payload;
     next();
   } catch (e) {
-    return res.status(401).json({ error: "Invalid token", detail: e.message });
+    return res.status(401).json({ error: "Invalid token" });
   }
 }
 
