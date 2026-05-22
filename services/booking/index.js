@@ -193,6 +193,51 @@ app.get("/api/v1/bookings/me", async (req, res) => {
   }
 });
 
+app.delete("/api/v1/bookings/:id", async (req, res) => {
+  const bookingId = parsePositiveInt(req.params.id);
+
+  if (!bookingId) {
+    return res.status(400).json({ error: "booking id is required" });
+  }
+
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    const bookingResult = await client.query(
+      `SELECT id, room_id, start_date, end_date
+       FROM bookings
+       WHERE id=$1 AND user_id=$2
+       FOR UPDATE`,
+      [bookingId, req.user.sub]
+    );
+
+    if (bookingResult.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    const booking = bookingResult.rows[0];
+    await client.query(
+      `UPDATE room_availability
+       SET available_count = available_count + 1
+       WHERE room_id=$1
+         AND date BETWEEN $2::date AND $3::date`,
+      [booking.room_id, booking.start_date, booking.end_date]
+    );
+
+    await client.query("DELETE FROM bookings WHERE id=$1", [bookingId]);
+    await client.query("COMMIT");
+
+    res.json({ deleted: true, booking_id: bookingId });
+  } catch (e) {
+    await client.query("ROLLBACK").catch(() => {});
+    sendServerError(res, e);
+  } finally {
+    client.release();
+  }
+});
+
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
   console.log("Booking service running on port " + PORT);

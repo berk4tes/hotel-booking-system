@@ -249,6 +249,12 @@ input:focus, select:focus, textarea:focus {
   padding: 16px;
 }
 
+.booking-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .summary-panel {
   display: grid;
   gap: 10px;

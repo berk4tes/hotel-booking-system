@@ -379,17 +379,32 @@ function AuthPage({ mode }) {
 function MyBookingsPage({ session }) {
   const [bookings, setBookings] = useState([]);
   const [total, setTotal] = useState(0);
-  useEffect(() => {
-    if (!session) return;
-    apiFetch("/api/v1/bookings/bookings/me?page=1&limit=20", { session }).then((data) => {
-      setBookings(data.data || []);
-      setTotal(data.total || 0);
-    });
-  }, [session]);
-  if (!session) return <AuthRequired />;
-  return <main className="page-shell"><section className="content-strip"><p className="eyebrow">My trips</p><h1 className="font-serif text-4xl font-semibold">{total} bookings</h1><div className="stack mt-6">{bookings.map((booking) => <article className="room-row" key={booking.id}><div><h3 className="text-lg font-semibold">{booking.hotel_name}</h3><p className="text-sm text-stone-500">{booking.room_type} · {booking.start_date?.slice(0, 10)} - {booking.end_date?.slice(0, 10)}</p></div><p className="price compact">{currency(booking.total_price)}</p></article>)}{!bookings.length && <div className="empty-state">No bookings yet.</div>}</div></section></main>;
-}
+  const [message, setMessage] = useState("");
 
+  async function loadBookings() {
+    if (!session) return;
+    const data = await apiFetch("/api/v1/bookings/bookings/me?page=1&limit=20", { session });
+    setBookings(data.data || []);
+    setTotal(data.total || 0);
+  }
+
+  useEffect(() => {
+    loadBookings().catch((e) => setMessage(e.message));
+  }, [session]);
+
+  async function cancelBooking(id) {
+    try {
+      await apiFetch(`/api/v1/bookings/bookings/${id}`, { method: "DELETE", session });
+      setMessage("Booking cancelled.");
+      await loadBookings();
+    } catch (e) {
+      setMessage(e.message);
+    }
+  }
+
+  if (!session) return <AuthRequired />;
+  return <main className="page-shell"><section className="content-strip"><p className="eyebrow">My trips</p><h1 className="font-serif text-4xl font-semibold">{total} bookings</h1>{message && <div className="notice">{message}</div>}<div className="stack mt-6">{bookings.map((booking) => <article className="room-row" key={booking.id}><div><h3 className="text-lg font-semibold">{booking.hotel_name}</h3><p className="text-sm text-stone-500">{booking.room_type} - {booking.start_date?.slice(0, 10)} - {booking.end_date?.slice(0, 10)}</p></div><div className="booking-actions"><p className="price compact">{currency(booking.total_price)}</p><button className="command-button slim" onClick={() => cancelBooking(booking.id)}>Cancel</button></div></article>)}{!bookings.length && <div className="empty-state">No bookings yet.</div>}</div></section></main>;
+}
 function AdminPage({ session }) {
   const [hotels, setHotels] = useState([]);
   const [rooms, setRooms] = useState([]);
