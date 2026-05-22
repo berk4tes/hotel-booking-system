@@ -14,12 +14,11 @@ function requiredEnv(name) {
   return value;
 }
 
-function proxyOptions(pathFilter, target, rewriteTo) {
+function proxyOptions(target, rewritePath) {
   return {
-    pathFilter,
     target,
     changeOrigin: true,
-    pathRewrite: rewriteTo,
+    pathRewrite: rewritePath,
     on: {
       error: (err, req, res) => {
         console.error("Gateway proxy error:", err.code || err.name || "Error");
@@ -43,15 +42,15 @@ app.get("/health", (req, res) => {
   res.json({ service: "gateway", status: "ok", services });
 });
 
-app.use(createProxyMiddleware(proxyOptions("/api/v1/admin", services.admin, { "^/api/v1/admin": "/api/v1" })));
+app.use("/api/v1/admin", createProxyMiddleware(proxyOptions(services.admin, (path) => `/api/v1${path}`)));
 
-app.use(createProxyMiddleware(proxyOptions("/api/v1/search", services.search, { "^/api/v1/search": "/api/v1" })));
+app.use("/api/v1/search", createProxyMiddleware(proxyOptions(services.search, (path) => `/api/v1${path}`)));
 
-app.use(createProxyMiddleware(proxyOptions("/api/v1/bookings", services.bookings, { "^/api/v1/bookings": "/api/v1" })));
+app.use("/api/v1/bookings", createProxyMiddleware(proxyOptions(services.bookings, (path) => `/api/v1${path}`)));
 
-app.use(createProxyMiddleware(proxyOptions("/api/v1/comments", services.comments, { "^/api/v1/comments": "/api/v1" })));
+app.use("/api/v1/comments", createProxyMiddleware(proxyOptions(services.comments, (path) => `/api/v1${path}`)));
 
-app.use(createProxyMiddleware(proxyOptions("/api/v1/ai", services.ai, { "^/api/v1/ai": "/api/v1/ai" })));
+app.use("/api/v1/ai", createProxyMiddleware(proxyOptions(services.ai, (path) => `/api/v1/ai${path}`)));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
