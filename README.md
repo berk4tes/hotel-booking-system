@@ -190,6 +190,10 @@ Completed smoke tests:
 - Frontend: `npm run build`.
 - Scheduler: Azure Functions Timer Trigger source added under `scheduler/azure-functions`.
 
+## Demo
+
+See [docs/demo.md](docs/demo.md) for the local demo runbook.
+
 ## Deployment Notes
 
 See [docs/deployment.md](docs/deployment.md) for the service-by-service deployment runbook.
