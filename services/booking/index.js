@@ -131,24 +131,28 @@ app.post("/api/v1/bookings", async (req, res) => {
       [req.user.sub, req.user.email, roomId, start_date, end_date, guests, totalPrice]
     );
 
-    const booking = bookingResult.rows[0];
-    await publishReservation({
-      booking_id: booking.id,
-      user_email: booking.user_email,
-      hotel_name: room.hotel_name,
-      room_type: room.room_type,
-      start_date,
-      end_date,
-      total_price: totalPrice
-    });
-
     await client.query("COMMIT");
-    res.status(201).json(normalizeBooking(booking));
+    const booking = bookingResult.rows[0];
+    let notificationQueued = true;
+
+    try {
+      await publishReservation({
+        booking_id: booking.id,
+        user_email: booking.user_email,
+        hotel_name: room.hotel_name,
+        room_type: room.room_type,
+        start_date,
+        end_date,
+        total_price: totalPrice
+      });
+    } catch (e) {
+      notificationQueued = false;
+      console.error("Reservation queue publish failed:", e.code || e.name || "Error");
+    }
+
+    res.status(201).json({ ...normalizeBooking(booking), notification_queued: notificationQueued });
   } catch (e) {
     await client.query("ROLLBACK").catch(() => {});
-    if (e.message === "AMQP_URL is required") {
-      return res.status(500).json({ error: "Reservation queue is not configured" });
-    }
     sendServerError(res, e);
   } finally {
     client.release();
