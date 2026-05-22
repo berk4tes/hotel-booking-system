@@ -176,10 +176,6 @@ function SearchPage({ session }) {
     }
   }
 
-  useEffect(() => {
-    searchHotels();
-  }, [session?.access_token]);
-
   return (
     <main className="page-shell">
       <section className="search-band">
@@ -213,7 +209,7 @@ function SearchPage({ session }) {
 }
 
 function HotelGrid({ hotels, session }) {
-  if (!hotels.length) return <div className="empty-state">No stays found for this search.</div>;
+  if (!hotels.length) return <div className="empty-state">Choose a city, dates, and guests to search available stays.</div>;
   return (
     <div className="hotel-grid">
       {hotels.map((hotel) => (
