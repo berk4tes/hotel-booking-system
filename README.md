@@ -8,14 +8,14 @@ Developer: Berk Ates, Yasar University, Software Engineering, Spring 2026.
 
 | Component | URL |
 |---|---|
-| Frontend | TBD after Azure Static Web Apps deployment |
-| API Gateway | TBD after Azure deployment |
-| Admin Service | TBD after Azure deployment |
-| Search Service | TBD after Azure deployment |
-| Booking Service | TBD after Azure deployment |
-| Comments Service | TBD after Azure deployment |
-| Notification Service | TBD after Azure deployment |
-| AI Agent Service | TBD after Azure deployment |
+| Frontend | https://hotel-booking-frontend-e6f4.onrender.com |
+| API Gateway | https://hotel-gateway-service.onrender.com |
+| Admin Service | Local/admin code included; not deployed separately on Render free tier |
+| Search Service | https://hotel-booking-system-0dh1.onrender.com |
+| Booking Service | https://hotel-booking-service-5l77.onrender.com |
+| Comments Service | https://hotel-comments-service.onrender.com |
+| Notification Service | https://hotel-notification-service.onrender.com |
+| AI Agent Service | https://hotel-ai-agent-service.onrender.com |
 
 ## Features
 
@@ -26,7 +26,7 @@ Developer: Berk Ates, Yasar University, Software Engineering, Spring 2026.
 - MongoDB Atlas for hotel comments and rating summaries.
 - Upstash Redis cache-aside for hotel details.
 - CloudAMQP RabbitMQ queue for reservation notifications.
-- Azure Functions Timer Trigger for scheduled notification endpoints.
+- Notification cron endpoints deployed on Render; Azure Functions Timer Trigger source included for cloud scheduling.
 - OpenAI `gpt-4o-mini` AI Agent with tool calling.
 - React + Vite + Tailwind + Leaflet frontend using the API Gateway as the single entry point.
 
@@ -42,7 +42,7 @@ flowchart LR
   Gateway --> Booking[Booking Service]
   Gateway --> Comments[Comments Service]
   Gateway --> AI[AI Agent Service]
-  Scheduler[Azure Functions Timer] --> Notification[Notification Service]
+  Scheduler[Azure Functions Timer Source] --> Notification[Notification Service]
   Booking --> Queue[(CloudAMQP RabbitMQ)]
   Notification --> Queue
   Search --> Redis[(Upstash Redis)]
@@ -188,7 +188,7 @@ Completed smoke tests:
 - AI Agent service: OpenAI key, chat response, gateway-routed search tool.
 - Gateway: Search, Comments, Booking auth, AI chat, AI tool routing.
 - Frontend: `npm run build`.
-- Scheduler: Azure Functions Timer Trigger source added under `scheduler/azure-functions`.
+- Scheduler: notification cron endpoints verified; Azure Functions Timer Trigger source added under `scheduler/azure-functions`.
 
 ## Demo
 
@@ -198,17 +198,17 @@ See [docs/demo.md](docs/demo.md) for the local demo runbook.
 
 See [docs/deployment.md](docs/deployment.md) for the service-by-service deployment runbook.
 
-Backend target: Azure App Service, Linux, Node 20.
+Backend deployment used Render Web Services because the Azure for Students subscription was disabled during final deployment.
 
-Frontend target: Azure Static Web Apps, app location `frontend`, output location `dist`.
+Frontend deployment used Render Static Site.
 
-Azure Functions app setting needed after Notification Service deployment:
+Notification scheduler source is included under `scheduler/azure-functions`. Required Function App setting if deployed to Azure Functions later:
 
 ```text
 NOTIFICATION_URL=https://<notification-service-url>
 ```
 
-Azure Static Web Apps environment variables:
+Frontend environment variables:
 
 ```text
 VITE_API_GATEWAY_URL=https://<gateway-url>
@@ -227,4 +227,4 @@ VITE_SUPABASE_PUBLISHABLE_KEY=...
 
 ## Demo Video
 
-TBD.
+https://drive.google.com/file/d/1Rfynegl3pOd8-0gJPEFTXcUswiLeffiO/view?usp=sharing
