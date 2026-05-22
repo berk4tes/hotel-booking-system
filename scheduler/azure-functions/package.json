@@ -1,0 +1,15 @@
+{
+  "name": "hotel-booking-scheduler",
+  "version": "1.0.0",
+  "description": "Azure Functions timer scheduler for hotel booking notification jobs.",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -188,13 +188,13 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - Docker images were not built or pushed, per assignment note
 
-\- \*\*GitHub Actions scheduler\*\* - added:
+\- \*\*Azure Functions scheduler\*\* - added:
 
-&#x20; - `.github/workflows/cron.yml` triggers notification cron endpoints daily at 02:00 UTC
+&#x20; - `scheduler/azure-functions` contains a Timer Trigger for notification cron endpoints daily at 02:00 UTC
 
-&#x20; - Manual `workflow_dispatch` trigger included for demos
+&#x20; - Uses Azure Functions app setting `NOTIFICATION_URL` after Notification Service is deployed
 
-&#x20; - Requires GitHub secret `NOTIFICATION_URL` after Notification Service is deployed
+&#x20; - Scheduled work now runs on an Azure cloud service
 
 \- \*\*Docs/README\*\* - drafted:
 
@@ -202,7 +202,7 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 &#x20; - `docs/architecture.md` and `docs/er-diagram.md` added with Mermaid diagrams
 
-&#x20; - `docs/deployment.md` added with Azure/Vercel/GitHub Actions deployment runbook
+&#x20; - `docs/deployment.md` added with Azure App Service, Azure Static Web Apps, and Azure Functions deployment runbook
 
 &#x20; - Deployed URLs and demo video link still TBD until deployment/demo recording
 
@@ -210,7 +210,7 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 \### Remaining (in priority order)
 
-1\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Vercel for frontend)
+1\. \*\*Cloud deployment\*\* (Azure App Service for 7 backends, Azure Static Web Apps for frontend, Azure Functions for scheduler)
 
 2\. Fill final \*\*README\*\* deployed URLs and demo video link after deployment
 
@@ -250,11 +250,11 @@ Developer: Berk Ates, Yaşar Üniversitesi, Software Engineering. Spring 2026.
 
 | API Gateway | Express + http-proxy-middleware |
 
-| Scheduler | GitHub Actions cron |
+| Scheduler | Azure Functions Timer Trigger |
 
 | Deploy (API) | Azure App Service (Linux, Node 20) |
 
-| Deploy (Frontend) | Vercel |
+| Deploy (Frontend) | Azure Static Web Apps |
 
 
 
@@ -292,7 +292,7 @@ hotel-booking-system/
 
 ├── docs/               DONE (ER diagram, architecture diagram)
 
-└── .github/workflows/  DONE (cron.yml)
+└── scheduler/          DONE (Azure Functions Timer Trigger)
 
 
 
@@ -612,7 +612,7 @@ Public read, auth for write.
 
 \- `GET /cron/process-reservations` → consume all messages from `reservations` queue, log "Notification sent to {user\_email}: reservation #{id} confirmed at {hotel\_name}".
 
-\- Both endpoints triggered by GitHub Actions cron daily at 02:00 UTC.
+\- Both endpoints are triggered by Azure Functions Timer Trigger daily at 02:00 UTC.
 
 
 
@@ -708,39 +708,13 @@ Each of the 7 services as a separate App Service (Linux, Node 20). Env vars in A
 
 
 
-\### Frontend → Vercel
+\### Frontend → Azure Static Web Apps
 
-Connect GitHub repo, root: `frontend/`. Env: `VITE\_API\_GATEWAY\_URL`.
+Connect GitHub repo. App location: `frontend/`. Output location: `dist`. Env: `VITE\_API\_GATEWAY\_URL`.
 
+\### Scheduler → Azure Functions
 
-
-\### Scheduler → GitHub Actions
-
-`.github/workflows/cron.yml`:
-
-
-
-```yaml
-
-on:
-
-&#x20; schedule:
-
-&#x20;   - cron: '0 2 \* \* \*'
-
-jobs:
-
-&#x20; trigger:
-
-&#x20;   runs-on: ubuntu-latest
-
-&#x20;   steps:
-
-&#x20;     - run: curl ${{ secrets.NOTIFICATION\_URL }}/cron/check-capacity
-
-&#x20;     - run: curl ${{ secrets.NOTIFICATION\_URL }}/cron/process-reservations
-
-```
+Deploy `scheduler/azure-functions` as a Node 20 Function App with a Timer Trigger. App setting: `NOTIFICATION_URL=https://<notification-app-service-url>`.
 
 
 
@@ -782,7 +756,7 @@ jobs:
 
 \- \[x] Cloud queue (CloudAMQP)
 
-\- \[x] Cloud scheduler workflow (GitHub Actions; `NOTIFICATION_URL` secret needed after deploy)
+\- \[x] Cloud scheduler service (Azure Functions Timer Trigger; `NOTIFICATION_URL` app setting needed after deploy)
 
 \- \[x] Search returns only vacant rooms
 
@@ -996,5 +970,5 @@ app.use("/api/v1/search", createProxyMiddleware({
 
 
 
-Prepare \*\*cloud deployment\*\* next: Azure App Service environment variables for each backend, Vercel frontend env vars, and GitHub Actions cron secrets.
+Prepare \*\*cloud deployment\*\* next: Azure App Service environment variables for each backend, Azure Static Web Apps frontend env vars, and Azure Functions scheduler app settings.
 

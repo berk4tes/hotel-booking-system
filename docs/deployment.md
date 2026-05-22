@@ -78,22 +78,32 @@ COMMENTS_SERVICE_URL=https://<comments-app-service-url>
 AI_AGENT_SERVICE_URL=https://<ai-agent-app-service-url>
 ```
 
+## Scheduler Target
+
+Azure Functions, Node 20, Consumption plan. Deploy the folder `scheduler/azure-functions`.
+
+Required Function App setting after Notification Service deployment:
+
+```text
+NOTIFICATION_URL=https://<notification-app-service-url>
+```
+
+The timer trigger schedule is `0 0 2 * * *`, which runs daily at 02:00 UTC.
+
 ## Frontend Target
 
-Vercel project root: `frontend/`.
+Azure Static Web Apps.
+
+```text
+App location: frontend
+Output location: dist
+Build command: npm run build
+```
 
 ```text
 VITE_API_GATEWAY_URL=https://<gateway-app-service-url>
 VITE_SUPABASE_URL=...
 VITE_SUPABASE_PUBLISHABLE_KEY=...
-```
-
-## GitHub Actions Secret
-
-Add after Notification Service deployment:
-
-```text
-NOTIFICATION_URL=https://<notification-app-service-url>
 ```
 
 ## Smoke Test Order
@@ -104,4 +114,4 @@ NOTIFICATION_URL=https://<notification-app-service-url>
 4. Booking through gateway with user Bearer token: `GET /api/v1/bookings/bookings/me`
 5. AI through gateway: `POST /api/v1/ai/chat`
 6. Notification directly: `GET /cron/check-capacity`
-7. GitHub Actions: manually run `Notification cron`
+7. Azure Functions: run the `notificationCron` function or wait for the 02:00 UTC timer

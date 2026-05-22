@@ -8,7 +8,7 @@ Developer: Berk Ates, Yasar University, Software Engineering, Spring 2026.
 
 | Component | URL |
 |---|---|
-| Frontend | TBD after Vercel deployment |
+| Frontend | TBD after Azure Static Web Apps deployment |
 | API Gateway | TBD after Azure deployment |
 | Admin Service | TBD after Azure deployment |
 | Search Service | TBD after Azure deployment |
@@ -26,7 +26,7 @@ Developer: Berk Ates, Yasar University, Software Engineering, Spring 2026.
 - MongoDB Atlas for hotel comments and rating summaries.
 - Upstash Redis cache-aside for hotel details.
 - CloudAMQP RabbitMQ queue for reservation notifications.
-- GitHub Actions cron workflow for scheduled notification endpoints.
+- Azure Functions Timer Trigger for scheduled notification endpoints.
 - OpenAI `gpt-4o-mini` AI Agent with tool calling.
 - React + Vite + Tailwind + Leaflet frontend using the API Gateway as the single entry point.
 
@@ -42,7 +42,7 @@ flowchart LR
   Gateway --> Booking[Booking Service]
   Gateway --> Comments[Comments Service]
   Gateway --> AI[AI Agent Service]
-  Scheduler[GitHub Actions Cron] --> Notification[Notification Service]
+  Scheduler[Azure Functions Timer] --> Notification[Notification Service]
   Booking --> Queue[(CloudAMQP RabbitMQ)]
   Notification --> Queue
   Search --> Redis[(Upstash Redis)]
@@ -188,6 +188,7 @@ Completed smoke tests:
 - AI Agent service: OpenAI key, chat response, gateway-routed search tool.
 - Gateway: Search, Comments, Booking auth, AI chat, AI tool routing.
 - Frontend: `npm run build`.
+- Scheduler: Azure Functions Timer Trigger source added under `scheduler/azure-functions`.
 
 ## Deployment Notes
 
@@ -195,15 +196,15 @@ See [docs/deployment.md](docs/deployment.md) for the service-by-service deployme
 
 Backend target: Azure App Service, Linux, Node 20.
 
-Frontend target: Vercel, root directory `frontend/`.
+Frontend target: Azure Static Web Apps, app location `frontend`, output location `dist`.
 
-GitHub Actions secret needed after Notification Service deployment:
+Azure Functions app setting needed after Notification Service deployment:
 
 ```text
 NOTIFICATION_URL=https://<notification-service-url>
 ```
 
-Vercel environment variables:
+Azure Static Web Apps environment variables:
 
 ```text
 VITE_API_GATEWAY_URL=https://<gateway-url>

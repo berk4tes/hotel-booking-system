@@ -11,7 +11,7 @@ flowchart LR
   Gateway --> Comments[Comments Service :3004]
   Gateway --> AI[AI Agent Service :3006]
 
-  Scheduler[GitHub Actions Cron] --> Notification[Notification Service :3005]
+  Scheduler[Azure Functions Timer] --> Notification[Notification Service :3005]
 
   Admin --> Postgres[(Neon PostgreSQL)]
   Search --> Postgres

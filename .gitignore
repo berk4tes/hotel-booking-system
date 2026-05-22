@@ -5,6 +5,7 @@
 *.log
 dist/
 build/
+local.settings.json
 .DS_Store
 .vscode/
 .idea/
