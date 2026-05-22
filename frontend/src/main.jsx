@@ -55,6 +55,20 @@ function currency(value) {
   return new Intl.NumberFormat("tr-TR", { style: "currency", currency: "EUR" }).format(Number(value));
 }
 
+function ratingLabel(key) {
+  return key.replaceAll("_", " ");
+}
+
+function ratingPercent(value) {
+  const score = Number(value || 0);
+  return `${Math.max(0, Math.min(100, (score / 10) * 100))}%`;
+}
+
+function ratingValue(value) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return "-";
+  return Number(value).toFixed(2);
+}
+
 function navigate(path) {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("app:navigate"));
@@ -323,7 +337,7 @@ function HotelDetailPage({ session, id }) {
           <p className="mb-4 text-sm text-stone-500">{summary?.total || 0} verified comments</p>
           <p className="mb-5 text-4xl font-semibold text-emerald-900">{summary?.average_overall || "-"}</p>
           {summary?.averages && Object.entries(summary.averages).map(([key, value]) => (
-            <div className="score-row" key={key}><span>{key.replace("_", " ")}</span><div><span style={{ width: `${(Number(value || 0) / 5) * 100}%` }} /></div><strong>{value || "-"}</strong></div>
+            <div className="score-row" key={key}><span>{ratingLabel(key)}</span><div><span style={{ width: ratingPercent(value) }} /></div><strong>{ratingValue(value)}</strong></div>
           ))}
         </aside>
       </section>

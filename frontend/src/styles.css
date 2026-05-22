@@ -250,22 +250,30 @@ input:focus, select:focus, textarea:focus {
 }
 
 .summary-panel {
-  padding: 20px;
+  display: grid;
+  gap: 10px;
+  padding: 22px;
   align-self: start;
 }
 
 .score-row {
   display: grid;
-  grid-template-columns: 92px 1fr 38px;
-  gap: 10px;
+  grid-template-columns: minmax(92px, 0.95fr) minmax(120px, 1.35fr) 48px;
+  gap: 12px;
   align-items: center;
-  margin: 12px 0;
   font-size: 13px;
   text-transform: capitalize;
 }
 
+.score-row > span {
+  color: #292524;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .score-row div {
-  height: 8px;
+  height: 9px;
+  overflow: hidden;
   background: #e7e0d4;
 }
 
@@ -273,6 +281,12 @@ input:focus, select:focus, textarea:focus {
   display: block;
   height: 100%;
   background: #0f766e;
+}
+
+.score-row strong {
+  color: #134e4a;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .comment-grid, .admin-grid {
@@ -395,18 +409,21 @@ input:focus, select:focus, textarea:focus {
 
 .ai-form {
   display: grid;
-  grid-template-columns: 1fr 46px;
+  grid-template-columns: minmax(0, 1fr) 52px;
   border-top: 1px solid #d7d0c3;
 }
 
 .ai-form input {
   border: 0;
+  min-width: 0;
 }
 
 .ai-form button {
   border: 0;
   background: #134e4a;
   color: #fffdf7;
+  display: grid;
+  place-items: center;
 }
 
 @media (max-width: 900px) {
